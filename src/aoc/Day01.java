@@ -26,10 +26,5 @@ public class Day01 {
         System.out.println("result of q2=" + result);
     }
 
-    public static void main(String[] args) {
-        Day01 d1 = new Day01();
-        d1.q1();
-        d1.q2();
-    }
 }
 
