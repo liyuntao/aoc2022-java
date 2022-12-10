@@ -11,29 +11,26 @@ public class Day05 implements DayBase {
 
     private static final Pattern ACTION_RE = Pattern.compile("move (\\d+) from (\\d+) to (\\d+)");
 
-    public Number q1() {
+    public String q1() {
         var appState = parseInitStacks();
         var actions = parseActions();
 
         actions.forEach(action -> executionQ1Action(action, appState));
-        peekTopOfEveryStack(appState);
-        return 1;
+        return peekTopOfEveryStack(appState);
     }
 
-    public Number q2() {
+    public String q2() {
         var appState = parseInitStacks();
         var actions = parseActions();
 
         actions.forEach(action -> executionQ2Action(action, appState));
-        peekTopOfEveryStack(appState);
-        return 1;
+        return peekTopOfEveryStack(appState);
     }
 
-    private void peekTopOfEveryStack(List<Stack<Character>> appState) {
-        appState.stream().skip(1).forEach(stack -> {
-            System.out.print(stack.isEmpty() ? " " : stack.peek());
-        });
-        System.out.println("\npeek finished");
+    private String peekTopOfEveryStack(List<Stack<Character>> appState) {
+        return appState.stream().skip(1)
+                .map(stack -> stack.isEmpty() ? " " : stack.peek().toString())
+                .reduce("", (a,b) -> a+b);
     }
 
     private void executionQ1Action(Action action, List<Stack<Character>> appState) {

@@ -1,6 +1,6 @@
 package aoc;
 
 public interface DayBase {
-    Number q1();
-    Number q2();
+    Object q1();
+    Object q2();
 }
