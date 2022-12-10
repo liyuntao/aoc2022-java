@@ -2,8 +2,9 @@ package aoc;
 
 public class Main {
     public static void main(String[] args) {
-        Day04 day = new Day04();
-        day.q1();
-        day.q2();
+        DayBase day = new Day04();
+
+        System.out.println("result of q1=" + day.q1());
+        System.out.println("result of q2=" + day.q2());
     }
 }

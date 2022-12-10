@@ -3,7 +3,7 @@ package aoc;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Day04 {
+public class Day04 implements DayBase {
 
     private static final Pattern RE = Pattern.compile("(\\d+)-(\\d+),(\\d+)-(\\d+)");
 
@@ -37,22 +37,20 @@ public class Day04 {
     }
 
 
-    public void q1() {
-        var q1 = AocTools.readInputToLines("day04.txt")
+    public Number q1() {
+        return AocTools.readInputToLines("day04.txt")
                 .stream()
                 .map(this::parseLine)
                 .filter(arr -> isContains(arr[0], arr[1], arr[2], arr[3]))
                 .count();
-        System.out.println("result of q1=" + q1);
     }
 
-    public void q2() {
-        var q2 = AocTools.readInputToLines("day04.txt")
+    public Number q2() {
+        return AocTools.readInputToLines("day04.txt")
                 .stream()
                 .map(this::parseLine)
                 .filter(arr -> isOverlap(arr[0], arr[1], arr[2], arr[3]))
                 .count();
-        System.out.println("result of q2=" + q2);
     }
 
 }
