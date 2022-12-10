@@ -38,7 +38,7 @@ public class Day04 implements DayBase {
 
 
     public Number q1() {
-        return AocTools.readInputToLines("day04.txt")
+        return AocParseTools.readInputToLines("day04.txt")
                 .stream()
                 .map(this::parseLine)
                 .filter(arr -> isContains(arr[0], arr[1], arr[2], arr[3]))
@@ -46,7 +46,7 @@ public class Day04 implements DayBase {
     }
 
     public Number q2() {
-        return AocTools.readInputToLines("day04.txt")
+        return AocParseTools.readInputToLines("day04.txt")
                 .stream()
                 .map(this::parseLine)
                 .filter(arr -> isOverlap(arr[0], arr[1], arr[2], arr[3]))

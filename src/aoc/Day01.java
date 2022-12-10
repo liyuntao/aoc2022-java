@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class Day01 implements DayBase {
 
     public Number q1() {
-        return Arrays.stream(AocTools.readInputToStr("day01.txt")
+        return Arrays.stream(AocParseTools.readInputToStr("day01.txt")
                 .replaceAll("\n", ",")
                 .split(",,"))
                 .mapToInt(groupLine -> Arrays.stream(groupLine.split(",")).mapToInt(Integer::parseInt).sum())
@@ -15,7 +15,7 @@ public class Day01 implements DayBase {
     }
 
     public Number q2() {
-        var arr = Arrays.stream(AocTools.readInputToStr("day01.txt")
+        var arr = Arrays.stream(AocParseTools.readInputToStr("day01.txt")
                         .replaceAll("\n", ",")
                         .split(",,"))
                 .mapToInt(groupLine -> Arrays.stream(groupLine.split(",")).mapToInt(Integer::parseInt).sum())
