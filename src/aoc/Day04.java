@@ -17,7 +17,7 @@ public class Day04 implements DayBase {
                     Integer.parseInt(m.group(4))
             };
         }
-        throw new RuntimeException("not possiable");
+        throw new RuntimeException("not possible");
     }
 
     private boolean isContains(int a, int b, int c, int d) {

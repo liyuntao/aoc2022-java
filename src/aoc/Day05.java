@@ -54,7 +54,6 @@ public class Day05 implements DayBase {
     }
 
     private List<Stack<Character>> parseInitStacks() {
-        var input = AocParseTools.readInputToLines("day05.txt");
         var appState = List.of(
                 new Stack<Character>(),
                 new Stack<Character>(), // 1
@@ -67,9 +66,10 @@ public class Day05 implements DayBase {
                 new Stack<Character>(),
                 new Stack<Character>() // 9
         );
-        var stackMatrix = AocParseTools.firstNLines(input, 8);
-        Collections.reverse(stackMatrix);
-        stackMatrix.forEach( line -> {
+        var allInputs = AocParseTools.readInputToLines("day05.txt");
+        var stackInputs = AocParseTools.firstNLines(allInputs, 8);
+        Collections.reverse(stackInputs);
+        stackInputs.forEach( line -> {
             Character[] parsed = parseStackLine(line);
             for (int i = 1; i <= 9; i++) {
                 if (parsed[i] != null && parsed[i] != ' ') {
@@ -81,8 +81,8 @@ public class Day05 implements DayBase {
     }
 
     private List<Action> parseActions() {
-        var input = AocParseTools.readInputToLines("day05.txt");
-        return AocParseTools.linesAfterN(input, 10).stream()
+        var allInputs = AocParseTools.readInputToLines("day05.txt");
+        return AocParseTools.linesAfterN(allInputs, 10).stream()
                 .map(this::parseActionLine)
                 .toList();
     }
@@ -116,7 +116,7 @@ public class Day05 implements DayBase {
                     Integer.parseInt(m.group(2)),
                     Integer.parseInt(m.group(3)));
         }
-        throw new RuntimeException("not possiable");
+        throw new RuntimeException("not possible");
     }
 
     record Action(int movTimes, int from, int to){}
