@@ -1,6 +1,8 @@
 package aoc;
 
 
+import aoc.tools.AocParseTools;
+
 import java.util.Arrays;
 
 public class Day01 implements DayBase {
