@@ -15,22 +15,4 @@ public class IntMatrix {
         return inner[x][y];
     }
 
-    public Integer safeUp(int a, int b) {
-        int x = a;
-        int y = b - 1;
-        if (x < 0 || x >= M || y < 0 || y >= N) {
-            return null;
-        }
-        return inner[x][y];
-    }
-
-    public Integer safeLeft(int a, int b) {
-        int x = a - 1;
-        int y = b;
-        if (x < 0 || x >= M || y < 0 || y >= N) {
-            return null;
-        }
-        return inner[x][y];
-    }
-
 }
