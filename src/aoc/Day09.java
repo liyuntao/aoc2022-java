@@ -2,7 +2,7 @@ package aoc;
 
 
 import aoc.tools.AocParseTools;
-import aoc.tools.Tuple2;
+import aoc.tools.Point;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,44 +20,55 @@ public class Day09 implements DayBase {
     }
 
     public Number q1() {
-        var exec = new Day09Executor();
+        var exec = new Q1Executor();
         parseInputs().forEach(exec::executeMotion);
         return exec.countVisited();
     }
 
     public Number q2() {
-        return 1;
+        var exec = new Q2Executor();
+        parseInputs().forEach(exec::executeMotion);
+        return exec.countVisited();
     }
 
 }
 
-record Motion(char direction, int steps){}
+record Motion(char direction, int steps) {
+}
 
-class Day09Executor {
+class Q1Executor {
     int headX = 0;
     int headY = 0;
+    int headPreX = 0;
+    int headPreY = 0;
     int tailX = 0;
     int tailY = 0;
-    private final Set<Tuple2<Integer, Integer>> visitedPoints;
+    private final Set<Point> visitedPoints;
 
-    public Day09Executor() {
+    public Q1Executor() {
         visitedPoints = new HashSet<>();
+        visitedPoints.add(Point.of(0, 0));
     }
 
-    private boolean isHeadTailAdjacent() {
-        return Math.abs(headX - tailX) <= 1 && Math.abs(headY - tailY) <= 1;
+    private boolean isHeadTailNotAdjacent() {
+        return Math.abs(headX - tailX) > 1 || Math.abs(headY - tailY) > 1;
     }
 
     public void executeMotion(Motion m) {
         for (int i = 0; i < m.steps(); i++) {
             tickHeadMove(m.direction());
-            if (!isHeadTailAdjacent()) {
-                tickTailFollow(m.direction());
+            if (isHeadTailNotAdjacent()) {
+                tickTailFollow();
             }
         }
     }
 
     private void tickHeadMove(char direction) {
+        // record head position before move
+        this.headPreX = this.headX;
+        this.headPreY = this.headY;
+
+        // move head
         switch (direction) {
             case 'L' -> this.headX--;
             case 'R' -> this.headX++;
@@ -67,29 +78,93 @@ class Day09Executor {
         }
     }
 
-    private void tickTailFollow(char headDirection) {
-        visitedPoints.add(new Tuple2<>(this.tailX, this.tailY));
-        switch (headDirection) {
-            case 'L' -> {
-                this.tailX = this.headX + 1;
-                this.tailY = this.headY;
-            }
-            case 'R' -> {
-                this.tailX = this.headX - 1;
-                this.tailY = this.headY;
-            }
-            case 'D' -> {
-                this.tailX = this.headX;
-                this.tailY = this.headY + 1;
-            }
-            case 'U' -> {
-                this.tailX = this.headX;
-                this.tailY = this.headY - 1;
-            }
+    private void tickTailFollow() {
+        this.tailX = this.headPreX;
+        this.tailY = this.headPreY;
+        visitedPoints.add(Point.of(this.tailX, this.tailY)); // record tail after mov
+    }
+
+    public int countVisited() {
+        return visitedPoints.size();
+    }
+}
+
+class Q2Executor {
+    private final Point[] appState = new Point[]{
+            Point.of(0, 0), // head
+            Point.of(0, 0), // point1
+            Point.of(0, 0),
+            Point.of(0, 0),
+            Point.of(0, 0),
+            Point.of(0, 0),
+            Point.of(0, 0),
+            Point.of(0, 0),
+            Point.of(0, 0),
+            Point.of(0, 0), // point9
+    };
+    private final Set<Point> visitedPoints;
+
+    public Q2Executor() {
+        visitedPoints = new HashSet<>();
+        visitedPoints.add(Point.of(0, 0));
+    }
+
+    private void recordVisited(int x, int y) {
+        visitedPoints.add(Point.of(x, y));
+    }
+
+    private boolean isNotAdjacent(int p1, int p2) {
+        return Math.abs(appState[p1].x - appState[p2].x) > 1
+                || Math.abs(appState[p1].y - appState[p2].y) > 1;
+    }
+
+    private boolean isSameRow(int p1, int p2) {
+        return appState[p1].x == appState[p2].x;
+    }
+
+    private boolean isSameCol(int p1, int p2) {
+        return appState[p1].y == appState[p2].y;
+    }
+
+    public void executeMotion(Motion m) {
+        for (int i = 0; i < m.steps(); i++) {
+            tickHeadMove(m.direction());
+            tickTailsMoveRecursive(1);
+        }
+    }
+
+    private void tickHeadMove(char direction) {
+        int HEAD_IDX = 0;
+        switch (direction) {
+            case 'L' -> appState[HEAD_IDX].x--;
+            case 'R' -> appState[HEAD_IDX].x++;
+            case 'D' -> appState[HEAD_IDX].y--;
+            case 'U' -> appState[HEAD_IDX].y++;
             default -> throw new RuntimeException("not possible");
         }
+    }
 
-        visitedPoints.add(new Tuple2<>(this.tailX, this.tailY));
+    // check previous point, and then choose whether to move cur point=$pointId
+    private void tickTailsMoveRecursive(int pointId) {
+        if (pointId > 9) return;
+
+        if (isNotAdjacent(pointId - 1, pointId)) {
+            if (isSameRow(pointId - 1, pointId)) { // move horizontally
+                if (appState[pointId - 1].x > ) {
+
+                }
+
+            } else if (isSameCol(pointId - 1, pointId)) { // move vertically
+
+            } else { // move diagonally
+
+            }
+
+            if (pointId == 9) {
+                this.recordVisited(appState[pointId].x, appState[pointId].y);
+            }
+            tickTailsMoveRecursive(pointId + 1);
+        }
     }
 
     public int countVisited() {
