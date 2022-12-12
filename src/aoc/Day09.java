@@ -20,13 +20,13 @@ public class Day09 implements DayBase {
     }
 
     public Number q1() {
-        var exec = new Q1Executor();
+        var exec = new Day9Executor(2);
         parseInputs().forEach(exec::executeMotion);
         return exec.countVisited();
     }
 
     public Number q2() {
-        var exec = new Q2Executor();
+        var exec = new Day9Executor(10);
         parseInputs().forEach(exec::executeMotion);
         return exec.countVisited();
     }
@@ -36,77 +36,21 @@ public class Day09 implements DayBase {
 record Motion(char direction, int steps) {
 }
 
-class Q1Executor {
-    int headX = 0;
-    int headY = 0;
-    int headPreX = 0;
-    int headPreY = 0;
-    int tailX = 0;
-    int tailY = 0;
+class Day9Executor {
+    private final int ropeLen;
+    private final Point[] appState;
     private final Set<Point> visitedPoints;
 
-    public Q1Executor() {
+    public Day9Executor(int ropeLen) {
         visitedPoints = new HashSet<>();
+        // 预先加入原点，后面实现会精简。只需记每次tail移动后坐标
         visitedPoints.add(Point.of(0, 0));
-    }
 
-    private boolean isHeadTailNotAdjacent() {
-        return Math.abs(headX - tailX) > 1 || Math.abs(headY - tailY) > 1;
-    }
-
-    public void executeMotion(Motion m) {
-        for (int i = 0; i < m.steps(); i++) {
-            tickHeadMove(m.direction());
-            if (isHeadTailNotAdjacent()) {
-                tickTailFollow();
-            }
+        this.ropeLen = ropeLen;
+        appState = new Point[ropeLen];
+        for (int i = 0; i < ropeLen; i++) {
+            appState[i] = Point.of(0, 0);
         }
-    }
-
-    private void tickHeadMove(char direction) {
-        // record head position before move
-        this.headPreX = this.headX;
-        this.headPreY = this.headY;
-
-        // move head
-        switch (direction) {
-            case 'L' -> this.headX--;
-            case 'R' -> this.headX++;
-            case 'D' -> this.headY--;
-            case 'U' -> this.headY++;
-            default -> throw new RuntimeException("not possible");
-        }
-    }
-
-    private void tickTailFollow() {
-        this.tailX = this.headPreX;
-        this.tailY = this.headPreY;
-        visitedPoints.add(Point.of(this.tailX, this.tailY)); // record tail after mov
-    }
-
-    public int countVisited() {
-        return visitedPoints.size();
-    }
-}
-
-class Q2Executor {
-    private final Point[] appState = new Point[]{
-            Point.of(0, 0), // head
-            Point.of(0, 0), // point1
-            Point.of(0, 0),
-            Point.of(0, 0),
-            Point.of(0, 0),
-            Point.of(0, 0),
-            Point.of(0, 0),
-            Point.of(0, 0),
-            Point.of(0, 0),
-            Point.of(0, 0), // point9
-    };
-    private final Set<Point> visitedPoints;
-
-    public Q2Executor() {
-        visitedPoints = new HashSet<>();
-        visitedPoints.add(Point.of(0, 0));
     }
 
     private void recordVisited(int x, int y) {
@@ -119,11 +63,11 @@ class Q2Executor {
     }
 
     private boolean isSameRow(int p1, int p2) {
-        return appState[p1].x == appState[p2].x;
+        return appState[p1].y == appState[p2].y;
     }
 
     private boolean isSameCol(int p1, int p2) {
-        return appState[p1].y == appState[p2].y;
+        return appState[p1].x == appState[p2].x;
     }
 
     public void executeMotion(Motion m) {
@@ -146,21 +90,19 @@ class Q2Executor {
 
     // check previous point, and then choose whether to move cur point=$pointId
     private void tickTailsMoveRecursive(int pointId) {
-        if (pointId > 9) return;
+        if (pointId >= this.ropeLen) return;
 
         if (isNotAdjacent(pointId - 1, pointId)) {
             if (isSameRow(pointId - 1, pointId)) { // move horizontally
-                if (appState[pointId - 1].x > ) {
-
-                }
-
+                appState[pointId].x += appState[pointId - 1].x > appState[pointId].x? 1 : -1;
             } else if (isSameCol(pointId - 1, pointId)) { // move vertically
-
+                appState[pointId].y += appState[pointId - 1].y > appState[pointId].y? 1 : -1;
             } else { // move diagonally
-
+                appState[pointId].x += appState[pointId - 1].x > appState[pointId].x? 1 : -1;
+                appState[pointId].y += appState[pointId - 1].y > appState[pointId].y? 1 : -1;
             }
 
-            if (pointId == 9) {
+            if (pointId == ropeLen - 1) {
                 this.recordVisited(appState[pointId].x, appState[pointId].y);
             }
             tickTailsMoveRecursive(pointId + 1);
