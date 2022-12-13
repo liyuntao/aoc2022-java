@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        DayBase day = new Day09();
+        DayBase day = new Day10();
         System.out.println("result of q1=" + day.q1());
         System.out.println("result of q2=" + day.q2());
     }
