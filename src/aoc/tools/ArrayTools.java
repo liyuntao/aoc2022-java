@@ -8,4 +8,13 @@ public class ArrayTools {
         }
         return res;
     }
+
+    public static void debugMatrix(char[][] matrix) {
+        for (char[] chars : matrix) {
+            for (char c : chars) {
+                System.out.print(c);
+            }
+            System.out.println();
+        }
+    }
 }

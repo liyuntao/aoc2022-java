@@ -14,6 +14,10 @@ public class Point {
         this.y = y;
     }
 
+    public Point clone() {
+        return new Point(this.x, this.y);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -30,5 +34,10 @@ public class Point {
         int result = x;
         result = 31 * result + y;
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Point(" + x + "," + y + ')';
     }
 }

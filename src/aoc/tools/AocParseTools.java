@@ -55,4 +55,16 @@ public class AocParseTools {
         }
         return matrix;
     }
+
+    public static CharMatrix parseToCharMatrix(String fileName) {
+        var lines = AocParseTools.readInputToLines(fileName);
+        var M = lines.get(0).length();
+        var N = lines.size();
+
+        char[][] matrix = new char[N][M];
+        for (int i = 0; i < N; i++) {
+            matrix[i] = lines.get(i).toCharArray();
+        }
+        return CharMatrix.of(matrix);
+    }
 }
