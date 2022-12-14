@@ -17,4 +17,13 @@ public class ArrayTools {
             System.out.println();
         }
     }
+
+    public static void debugMatrix(IntMatrix matrix) {
+        for (int[] line : matrix.inner) {
+            for (int i : line) {
+                System.out.print(i);
+            }
+            System.out.println();
+        }
+    }
 }

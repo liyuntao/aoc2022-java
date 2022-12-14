@@ -4,14 +4,18 @@ import aoc.tools.AocParseTools;
 import aoc.tools.CharMatrix;
 import aoc.tools.Point;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 
-public class Day12Fail implements DayBase {
+// timeout
+public class Day12BacktrackingFromEnd implements DayBase {
 
     private List<List<Point>> backtrackingEntry() {
         var matrix = AocParseTools.parseToCharMatrix("day12.txt");
         List<List<Point>> allAvailablePaths = new ArrayList<>();
-        backtracking(matrix, new LinkedHashSet<>(), allAvailablePaths, 0, 0);
+        var p = matrix.findFirst('E');
+        backtracking(matrix, new LinkedHashSet<>(), allAvailablePaths, p.x, p.y);
         return allAvailablePaths;
     }
 
@@ -22,7 +26,7 @@ public class Day12Fail implements DayBase {
         pathRecorder.add(Point.of(x, y));
 
         char curSymbol = matrix.get(x, y);
-        if (curSymbol == 'E') {
+        if (curSymbol == 'S') {
             // succeed path: record whole path, then quit recursion
             var oneSuccPath = pathRecorder.stream().map(Point::clone).toList();
 //            System.out.println(oneSuccPath.size() + "  " + Arrays.toString(oneSuccPath.toArray()));
@@ -45,12 +49,12 @@ public class Day12Fail implements DayBase {
     }
 
     private boolean canStepAhead(char curSymbol, char nextSymbol) {
-        if (curSymbol == 'S') {
-            return nextSymbol <= 'b';
-        } else if (nextSymbol == 'E') {
-            return curSymbol == 'z';
+        if (curSymbol == 'E') {
+            return nextSymbol == 'z';
+        } else if (nextSymbol == 'S') {
+            return curSymbol <= 'b';
         } else {
-            return nextSymbol - curSymbol <= 1;
+            return curSymbol - nextSymbol <= 1;
         }
     }
 
