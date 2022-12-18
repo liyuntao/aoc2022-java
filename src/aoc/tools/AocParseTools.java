@@ -4,10 +4,21 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class AocParseTools {
+
+    public static List<List<String>> readInputToGroupsEvery(String fileName, int pageSize) {
+        return groupByCount(AocParseTools.readInputToLines(fileName), pageSize);
+    }
+
+    public static List<List<String>> groupByCount(List<String> lines, int pageSize) {
+        return IntStream.range(0, (lines.size() + pageSize - 1) / pageSize)
+                .mapToObj(i -> lines.subList(i * pageSize, Math.min(pageSize * (i + 1), lines.size())))
+                .toList();
+    }
+
     public static List<String> readInputToLines(String fileName) {
         try {
             return Files.readAllLines(Paths.get("./input/" + fileName));
